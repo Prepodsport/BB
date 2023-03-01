@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block title %}
+Добавить материал
+{% endblock title %}
+{% block content %}
+<h1>{{ page_title }}</h1>
+
+
+<form action="" method="post" class="my-4">
+    {% csrf_token %}
+    {{ form|crispy|safe }}
+    {{form.media}}
+    <input type="submit" value="Сохранить" class="btn btn-outline-secondary"/>
+    <a class="btn btn-outline-danger" role="button" href="{{ request.path }}">Очистить введенные данные</a>
+</form>
+{% endblock content %}

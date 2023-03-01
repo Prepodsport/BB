@@ -1,0 +1,113 @@
+{% extends 'index.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load custom_tags %}
+{% load static i18n %}
+{% load bootstrap5 %}
+{#<table class="table table-borderless">#}
+{#</table>#}
+{#<div class="container mt-3">#}
+{#  <h2>Bordered Table</h2>#}
+{#  <p>The .table-bordered class adds borders on all sides of the table and the cells:</p>#}
+{#  <table class="table table-bordered">#}
+{#      <tr class="text-center">#}
+{#        <th>текст комментария</th>#}
+{#        <th>автор комментария</th>#}
+{#        <th>опубликовать свой комментарий</th>#}
+{#      </tr>#}
+{#      {% for comment in profile.user.feedback_set.all %}#}
+{#          {% if request.user == comment.author %}#}
+{#      <tr>#}
+{#        <td>{{ comment.text|safe|linebreaksbr }}</td>{{ comment.status }}#}
+{#        <td>{{ comment.author|safe }}</td>#}
+{#        <td>#}
+{#            <form method="post" enctype="multipart/form-data">#}
+{#                {% csrf_token %}#}
+{#                {{ form }}#}
+{#                <input type="submit" value="Сохранить" class="btn btn-secondary"/>#}
+{#           </form>#}
+{#        </td>#}
+{##}
+{#      </tr>#}
+{#          {% endif %}#}
+{#      {% endfor %}#}
+{#  </table>#}
+{#</div>#}
+
+{#                        {{comments.count}}   {{ page_user }} {{ profile.user.feedback_set.count }}#}
+{#                        {{ profile.user.feedback_set.count }}#}
+{% block content %}
+    <br>    {{ profile.user.feedback_set.count }}
+    <h3>Фильтр откликов на мои объявления:</h3><br>
+	<form method="POST">
+		{% csrf_token %}
+        {{ form }}
+		<input class="btn btn-secondary" type="submit" value="Показать">
+	</form><br>
+    {% if title %}
+        <h3>Oтклики на мое объявление</h3>
+        <a href="/board/{{ feedback_article_id }}" style="font-size: 20px;"><b>{{ title }}:</b></a><br>
+        {% if filter_feedback %}
+            {% for response in filter_feedback %}
+                <b style="font-size: 12px; color:green">Отклик: </b>{{ response.text|safe }}<br>
+                <span style="font-size: 12px;"><b>Автор отклика: {{ response.author.username }} |
+                    дата публикации отклика: {{ response.created_on }}</b></span><br>
+                {% if comments.status == False %}
+                    <a href="//board/feedbacks/accept/{{ response.id }}" style="font-size: 12px; color:green"><b>принять</b></a>
+                    <a>&nbsp;&nbsp;&nbsp;</a>
+                    <a href="/board/feedbacks/accept/{{ response.id }}" style="font-size: 12px; color:red"><b>удалить</b></a>
+                {% else %}
+                    <a style="font-size: 14px; color:green"><b>отклик принят</b></a>
+                {% endif %}
+                <br><br>
+            {% endfor %}
+        {% else %}
+            <br>
+            <h5>Откликов нет!</h5>
+        {% endif %}
+    {% else %}
+        <h3>Oтклики на все мои объявления:</h3>
+        {% if filter_feedback %}
+            {% for response in filter_feedback %}
+                <b>Объявление:</b>
+                <a href="/board/{{ response.article_id }}" style="font-size: 20px;"><b>{{ response.article.title }}</b></a><br>
+                <span style="font-size: 12px;"><b>Дата публикации объявления: {{ response.article.date_time }}</b>
+                </span><br>
+                <a><b>Отклик: </b></a>{{ response.text|safe }}<br>
+                <span style="font-size: 12px;"><b>Автор отклика: {{ response.author.username }} |
+                    дата публикации отклика: {{ response.created_on|timesince }} назад</b></span><br>
+                {% if response.status == False %}
+                    <a href="/board/feedbacks/accept/{{ response.id }}" style="font-size: 12px; color:green"><b>принять</b></a>
+                    <a>&nbsp;&nbsp;&nbsp;</a>
+                    <a href="/board/feedbacks/delete/{{ response.id }}" style="font-size: 12px; color:red"><b>удалить</b></a>
+                {% else %}
+                    <a style="font-size: 14px; color:green"><b>отклик принят</b></a>
+                {% endif %}
+                <br><br>
+            {% endfor %}
+        {% else %}
+            <h5>Откликов нет!</h5>
+        {% endif %}
+    {% endif %}
+    <br><br>
+    <h3>Мои отклики на объявления:</h3>
+    {% if my_feedback %}
+        {% for response in my_feedback %}
+            <a><b>Объявление:</b></a>
+            <a href="/board/{{ response.article_id }}" style="font-size: 20px;"><b>{{ response.article.title }}</b></a><br>
+            <span style="font-size: 12px;"><b>Автор объявления:  {{ response.article.author.username }} |
+                дата публикации объявления: {{ response.article.date_time }} </b></span><br>
+            <a><b>Мой отклик:</b></a>
+            {{ response.text|safe }}<br>
+            <span style="font-size: 12px;"><b>Дата публикации отклика: {{ response.created_on|timesince }} назад</b></span><br>
+            {% if response.status == True %}
+                <a style="font-size: 14px; color:green"><b>Автор объявления принял отклик!</b></a>
+            {% else %}
+                <a style="font-size: 14px; color:red"><b>Автор объявления пока не принял отклик!</b></a>
+            {% endif %}
+        <br><br>
+        {% endfor %}
+    {% else %}
+        <h5>Откликов нет!</h5>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+    <div class="card text-center">
+    <div class="card-body">
+        <h1>{% trans "Sign In" %}</h1>
+        {% get_providers as socialaccount_providers %}
+        {% if socialaccount_providers %}
+        <p>{% blocktrans with site.name as site_name %}"Please sign in with one
+        of your existing third party accounts. Or,  <a href="{{ signup_url }}">sign up</a>
+        for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+    </div>
+    </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center ">{% trans 'Log in using social accounts' %}</h4>
+                    <div class="socialaccount_ballot">
+                      <ul class="socialaccount_providers">
+                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                      </ul>
+                    </div>
+            </div>
+        </div>
+<h4 class="login-or text-center" >{% trans 'or' %}</h4>
+
+<div class="card">
+    <div class="card-body">
+        {% include "socialaccount/snippets/login_extra.html" %}
+{% else %}
+    <p>{% blocktrans %}If you have not created an account yet, then please
+    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  {{ form|crispy }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+
+        <div class="card">
+            <button class="btn btn-outline-secondary" type="submit">{% trans "Sign In" %}</button>
+        </div>
+
+            <hr>
+        <div class="card">
+          <a class="btn btn-outline-secondary" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+        </div>
+</form>
+</div>
+{% endblock %}
