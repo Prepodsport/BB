@@ -15,8 +15,8 @@ urlpatterns = [
     path('<int:pk>/', comments_detail, name='article_detail'),
     # path("feedback/<int:pk>/", views.AddFeedback.as_view(), name="add_feedback"),
     path('search/article/', views.Search.as_view(), name='search'),
-    path('feedbacks/accept/<int:pk>', response_accept),
-    path('feedbacks/delete/<int:pk>', response_delete),
+    path('feedbacks/accept/<int:pk>', feedback_accept),
+    path('feedbacks/delete/<int:pk>', feedback_delete),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

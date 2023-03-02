@@ -274,7 +274,7 @@ class FeedbackView(LoginRequiredMixin, ListView):
 
 
 @login_required
-def response_accept(request, **kwargs):
+def feedback_accept(request, **kwargs):
     if request.user.is_authenticated:
         feedback = Feedback.objects.get(id=kwargs.get('pk'))
         feedback.status = True
@@ -286,7 +286,7 @@ def response_accept(request, **kwargs):
 
 
 @login_required
-def response_delete(request, **kwargs):
+def feedback_delete(request, **kwargs):
     if request.user.is_authenticated:
         feedback = Feedback.objects.get(id=kwargs.get('pk'))
         feedback.delete()
