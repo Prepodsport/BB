@@ -79,32 +79,32 @@
 {#    {% endif %}#}
 {#</div>#}
 {#</div>#}
+{% if new_comment %}
+  <h2>Ваш комментарий был добавлен.</h2>
+{% else %}
+  <h2>Добавить отклик</h2>
+  <form action="" method="post">
+    {{ comment_form|crispy|safe }}
+      {{form.media}}
+    {% csrf_token %}
+    <p><input type="submit" value="Добавить"></p>
+  </form>
+{% endif %}
+{% for comment in comments %}
+  <div class="comment">
+    <p class="info">
+      {{ forloop.counter }} комментарий от {{ comment.author }}
+      {{ comment.created_on }}
+    </p>
+  {{ comment.text|safe|linebreaks }}
+  </div>
+{% empty %}
+  <p>Комментариев пока нет.</p>
+{% endfor %}
 
-{#{% for comment in comments %}#}
-{#  <div class="comment">#}
-{#    <p class="info">#}
-{#      {{ forloop.counter }} комментарий от {{ comment.author }}#}
-{#      {{ comment.created_on }}#}
-{#    </p>#}
-{#  {{ comment.text|safe|linebreaks }}#}
-{#  </div>#}
-{#{% empty %}#}
-{#  <p>There are no comments yet.</p>#}
-{#{% endfor %}#}
-{#{% if new_comment %}#}
-{#  <h2>Your comment has been added.</h2>#}
-{#{% else %}#}
-{#  <h2>Add a new comment</h2>#}
-{#  <form action="" method="post">#}
-{#    {{ comment_form|crispy|safe }}#}
-{#      {{form.media}}#}
-{#    {% csrf_token %}#}
-{#    <p><input type="submit" value="Add comment"></p>#}
-{#  </form>#}
-{#{% endif %}#}
 {#{% with comments.count as total_comments %}#}
 {#  <h2>#}
-{#    {{ total_comments }} comment{{ total_comments|pluralize }}#}
+{#    {{ total_comments }} комментариев{{ total_comments|pluralize }}#}
 {#  </h2>#}
 {#{% endwith %}#}
 
@@ -251,9 +251,9 @@
 {#                </div>#}
 {#            </div>#}
 
-<h2>Комментарии</h2>
-<h5 class="project--rating">всего комментариев: {{article.comments.count}}</h5>
-<ul class="list-group">
+{#<h2>Комментарии</h2>#}
+{#<h5 class="project--rating">всего комментариев: {{article.comments.count}}</h5>#}
+{#<ul class="list-group">#}
 
 {#<h2>Add a new comment</h2>#}
 {#<form action="." method="post">#}
@@ -285,48 +285,48 @@
 {#{% empty %}#}
 {#<h4>There are no comments yet.</h4>#}
 {#{% endfor %}#}
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/static/board/css/article_detail.css">
-<div class="container">
-<div class="be-comment-block">
-	<h1 class="comments-title">Комментарии ({{article.comments.count}})</h1>
-
-	<div class="be-comment">
-		<div class="be-img-comment">
-			<a href="blog-detail-2.html">
-				<img src="{{ article.author.profile.image.url }}" alt="" class="be-ava-comment">
-			</a>
-		</div>
-        {% for review in article.comments.all %}
-		<div class="be-comment-content">
-
-				<span class="be-comment-name">
-					<a href="blog-detail-2.html">{{ review.author }}</a>
-					</span>
-				<span class="be-comment-time">
-					<i class="fa fa-clock-o"></i>
-					{{ review.created_on }} {{ feedbacks }}
-				</span>
-
-			<p class="be-comment-text">
-                {{ review.text }}
-			</p>
-		</div>
-            {% endfor %}
-	</div>
-    <form class="form-block" action="" method="post" >
-        {% csrf_token %}
-        <div class="row">
-			<div class="col-xs-12">
-				<div class="form-group">
-					<textarea class="form-input" required="" placeholder="Ваш текст"></textarea>
-				</div>
-			</div>
-			<button class="btn btn-primary pull-right" type="submit">Отправить</button>
-		</div>
-	</form>
-</div>
-</div>
+{#    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">#}
+{#        <link rel="stylesheet" href="/static/board/css/article_detail.css">#}
+{#<div class="container">#}
+{#<div class="be-comment-block">#}
+{#	<h1 class="comments-title">Комментарии ({{article.comments.count}})</h1>#}
+{##}
+{#	<div class="be-comment">#}
+{#		<div class="be-img-comment">#}
+{#			<a href="blog-detail-2.html">#}
+{#				<img src="{{ article.author.profile.image.url }}" alt="" class="be-ava-comment">#}
+{#			</a>#}
+{#		</div>#}
+{#        {% for review in article.comments.all %}#}
+{#		<div class="be-comment-content">#}
+{##}
+{#				<span class="be-comment-name">#}
+{#					<a href="blog-detail-2.html">{{ review.author }}</a>#}
+{#					</span>#}
+{#				<span class="be-comment-time">#}
+{#					<i class="fa fa-clock-o"></i>#}
+{#					{{ review.created_on }} {{ feedbacks }}#}
+{#				</span>#}
+{##}
+{#			<p class="be-comment-text">#}
+{#                {{ review.text }}#}
+{#			</p>#}
+{#		</div>#}
+{#            {% endfor %}#}
+{#	</div>#}
+{#    <form class="form-block" action="" method="post" >#}
+{#        {% csrf_token %}#}
+{#        <div class="row">#}
+{#			<div class="col-xs-12">#}
+{#				<div class="form-group">#}
+{#					<textarea class="form-input" required="" placeholder="Ваш текст"></textarea>#}
+{#				</div>#}
+{#			</div>#}
+{#			<button class="btn btn-primary pull-right" type="submit">Отправить</button>#}
+{#		</div>#}
+{#	</form>#}
+{#</div>#}
+{#</div>#}
 
 {#{% for comment in comments %}#}
 {#    {% if comment.text %}#}
@@ -409,27 +409,27 @@
 {#    {% endif %}#}
 
 
-    <div class="row">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=1 %}">1</a></li>
-                {% if page_obj.previous_page_number != 1 %}
-                   <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                   <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a></li>
-               {% endif %}
-            {% endif %}
-
-            <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
-
-            {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a></li>
-               {% if paginator.num_pages != page_obj.next_page_number %}
-                   <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                   <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a></li>
-               {% endif %}
-                {% endif %}
-        </ul>
-    </nav>
-</div>
+{#    <div class="row">#}
+{#    <nav aria-label="Page navigation example">#}
+{#        <ul class="pagination justify-content-center">#}
+{#            {% if page_obj.has_previous %}#}
+{#                <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=1 %}">1</a></li>#}
+{#                {% if page_obj.previous_page_number != 1 %}#}
+{#                   <li class="page-item disabled"><a class="page-link" href="#">...</a></li>#}
+{#                   <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a></li>#}
+{#               {% endif %}#}
+{#            {% endif %}#}
+{##}
+{#            <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_obj.number }}</a></li>#}
+{##}
+{#            {% if page_obj.has_next %}#}
+{#                <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a></li>#}
+{#               {% if paginator.num_pages != page_obj.next_page_number %}#}
+{#                   <li class="page-item disabled"><a class="page-link" href="#">...</a></li>#}
+{#                   <li class="page-item"><a class="page-link" href="?{{ q }}{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a></li>#}
+{#               {% endif %}#}
+{#                {% endif %}#}
+{#        </ul>#}
+{#    </nav>#}
+{#</div>#}
 {% endblock content %}
